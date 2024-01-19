@@ -23,19 +23,6 @@ fs.mkdir(copyDir, { recursive: true }, (err) => {
             }
           },
         );
-      } else if (file.isDirectory()) {
-        fs.cp(
-          path.join(filesDir, file.name),
-          path.join(copyDir, file.name),
-          {
-            recursive: true,
-          },
-          (err) => {
-            if (err) {
-              throw 'Ошибка копирования директории';
-            }
-          },
-        );
       }
     });
   });
