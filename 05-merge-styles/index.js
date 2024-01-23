@@ -16,13 +16,15 @@ fs.readdir(stylesDir, { withFileTypes: true }, (err, files) => {
         path.join(stylesDir, file.name),
         'utf-8',
       );
-      readStream.on('data', (chunk) =>
-        fs.appendFile(path.join(projectDir, bundleName), chunk, (err) => {
-          if (err) {
-            throw 'Ошибка записи bundle.css';
-          }
-        }),
-      );
+      fs.rm(path.join(projectDir, bundleName), { recursive: true }, (err) => {
+        readStream.on('data', (chunk) =>
+          fs.appendFile(path.join(projectDir, bundleName), chunk, (err) => {
+            if (err) {
+              throw 'Ошибка записи bundle.css';
+            }
+          }),
+        );
+      });
     }
   });
 });
