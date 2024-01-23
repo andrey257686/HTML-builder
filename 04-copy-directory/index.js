@@ -32,28 +32,30 @@ const copyDir = path.join(__dirname, 'files-copy');
 // const assetsDir = path.join(__dirname, 'assets');
 
 const copyDirFunc = function (src, dest) {
-  fs.mkdir(dest, { recursive: true }, (err) => {
-    if (err) {
-      throw 'Ошибка создания директории';
-    }
-    fs.readdir(src, { withFileTypes: true }, (err, files) => {
+  fs.rm(dest, { recursive: true }, (err) => {
+    fs.mkdir(dest, { recursive: true }, (err) => {
       if (err) {
-        throw 'Ошибка чтения директории';
+        throw 'Ошибка создания директории';
       }
-      files.forEach((file) => {
-        if (file.isFile()) {
-          fs.copyFile(
-            path.join(src, file.name),
-            path.join(dest, file.name),
-            (err) => {
-              if (err) {
-                throw 'Ошибка копирования файлов в директории';
-              }
-            },
-          );
-        } else if (file.isDirectory()) {
-          copyDirFunc(path.join(src, file.name), path.join(dest, file.name));
+      fs.readdir(src, { withFileTypes: true }, (err, files) => {
+        if (err) {
+          throw 'Ошибка чтения директории';
         }
+        files.forEach((file) => {
+          if (file.isFile()) {
+            fs.copyFile(
+              path.join(src, file.name),
+              path.join(dest, file.name),
+              (err) => {
+                if (err) {
+                  throw 'Ошибка копирования файлов в директории';
+                }
+              },
+            );
+          } else if (file.isDirectory()) {
+            copyDirFunc(path.join(src, file.name), path.join(dest, file.name));
+          }
+        });
       });
     });
   });
